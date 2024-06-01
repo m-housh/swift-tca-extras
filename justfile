@@ -6,6 +6,7 @@ PLATFORM_WATCHOS := "watchOS Simulator,name=Apple Watch Series 9 (41mm)"
 
 SCHEME := "swift-tca-extras"
 CONFIG := "debug"
+DOCC_TARGET := "TCAExtras"
 
 test-ios:
   set -o pipefail && \
@@ -54,3 +55,19 @@ test-swift:
 
 format:
   @swiftformat .
+
+build-documentation:
+  @swift package \
+    --allow-writing-to-directory ./docs \
+    generate-documentation \
+    --target {{DOCC_TARGET}} \
+    --disable-indexing \
+    --transform-for-static-hosting \
+    --hosting-base-path swift-tca-extras \
+    --output-path ./docs
+
+preview-documentation:
+  @swift package \
+    --disable-sandbox \
+    preview-documentation \
+    --target {{DOCC_TARGET}}

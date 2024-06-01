@@ -1,5 +1,5 @@
 import ComposableArchitecture
-@testable import TCAExtras
+import TCAExtras
 import XCTest
 
 final class TCAExtrasTests: XCTestCase {

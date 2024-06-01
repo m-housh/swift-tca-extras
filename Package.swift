@@ -12,19 +12,23 @@ let package = Package(
     .watchOS(.v6),
   ],
   products: [
-    .library(name: "TCAExtras", targets: ["TCAExtras"]),
+    .library(name: "TCAExtras", targets: ["TCAExtras"])
   ],
   dependencies: [
     .package(
       url: "https://github.com/pointfreeco/swift-composable-architecture",
-      .upToNextMajor(from: "1.0.0")
+      from: "1.0.0"
+    ),
+    .package(
+      url: "https://github.com/apple/swift-docc-plugin.git",
+      from: "1.0.0"
     ),
   ],
   targets: [
     .target(
       name: "TCAExtras",
       dependencies: [
-        .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+        .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
       ]
     ),
     .testTarget(
