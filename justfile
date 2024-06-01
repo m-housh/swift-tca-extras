@@ -5,7 +5,7 @@ PLATFORM_TVOS := "tvOS Simulator,name=Apple TV"
 PLATFORM_WATCHOS := "watchOS Simulator,name=Apple Watch Series 9 (41mm)"
 
 SCHEME := "swift-tca-extras"
-CONFIG := debug
+CONFIG := "debug"
 
 test-ios:
   set -o pipefail && \
