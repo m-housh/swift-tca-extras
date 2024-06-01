@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  macOS:
+    name: macOS
+    runs-on: macos-14
+    strategy:
+      matrix:
+        xcode: ['15.4']
+        config: ['debug', 'release']
+    steps:
+      - uses: actions/checkout@v3
+      - name: Select Xcode ${{ matrix.xcode }}
+        run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app
+      - name: Swift version
+        run: swift --version
+      - name: Install Just
+        run: brew install just
+      - name: Run ${{ matrix.xcode }} Tests
+        run: just CONFIG=${{ matrix.config }} test-all
+

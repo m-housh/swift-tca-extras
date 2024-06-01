@@ -5,12 +5,14 @@ PLATFORM_TVOS := "tvOS Simulator,name=Apple TV"
 PLATFORM_WATCHOS := "watchOS Simulator,name=Apple Watch Series 9 (41mm)"
 
 SCHEME := "swift-tca-extras"
+CONFIG := debug
 
 test-ios:
   set -o pipefail && \
   xcodebuild test \
     -skipMacroValidation \
     -scheme {{SCHEME}} \
+    -configuration {{CONFIG}} \
     -destination platform='{{PLATFORM_IOS}}'
 
 test-macos:
@@ -18,6 +20,7 @@ test-macos:
   xcodebuild test \
     -skipMacroValidation \
     -scheme {{SCHEME}} \
+    -configuration {{CONFIG}} \
     -destination platform='{{PLATFORM_MACOS}}'
 
 test-mac-catalyst:
@@ -25,6 +28,7 @@ test-mac-catalyst:
   xcodebuild test \
     -skipMacroValidation \
     -scheme {{SCHEME}} \
+    -configuration {{CONFIG}} \
     -destination platform='{{PLATFORM_MAC_CATALYST}}'
 
 test-tvos:
@@ -32,6 +36,7 @@ test-tvos:
   xcodebuild test \
     -skipMacroValidation \
     -scheme {{SCHEME}} \
+    -configuration {{CONFIG}} \
     -destination platform='{{PLATFORM_TVOS}}'
 
 test-watchos:
@@ -39,6 +44,7 @@ test-watchos:
   xcodebuild test \
     -skipMacroValidation \
     -scheme {{SCHEME}} \
+    -configuration {{CONFIG}} \
     -destination platform='{{PLATFORM_WATCHOS}}'
 
 test-all: test-ios test-macos test-mac-catalyst test-tvos test-watchos
