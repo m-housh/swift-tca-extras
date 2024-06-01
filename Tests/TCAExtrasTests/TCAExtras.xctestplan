@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "F652F40E-E7EE-4783-9A0B-8AB51D9B5742",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "TCAExtrasTests",
+        "name" : "TCAExtrasTests"
+      }
+    }
+  ],
+  "version" : 1
+}
