@@ -140,10 +140,11 @@ extension Effect where Action: ReceiveAction {
     _ toReceiveAction: CaseKeyPath<Action.ReceiveAction, T>,
     _ operation: @escaping @Sendable () async throws -> T
   ) -> Self {
-    receive(operation: .case(
-      AnyCasePath(toReceiveAction),
-      operation
-    ))
+    receive(
+      operation: .case(
+        AnyCasePath(toReceiveAction),
+        operation
+      ))
   }
 }
 
@@ -162,10 +163,11 @@ struct ReceiveOperation<Action, Value, Result> {
 
   @usableFromInline
   func callAsFunction(send: Send<Action>) async {
-    await send(embed(
-      TaskResult { try await operation() }
-        .map(transform)
-    ))
+    await send(
+      embed(
+        TaskResult { try await operation() }
+          .map(transform)
+      ))
   }
 
   @usableFromInline
