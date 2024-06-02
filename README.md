@@ -94,3 +94,25 @@ struct MyFeature {
 
 The above example uses several of the reducers and effects that are supplied by
 this package.
+
+## Documentation
+
+The full documentation can be viewed
+[here](https://m-housh.github.io/swift-tca-extras/documentation/tcaextras/)
+
+## License
+
+This package is licensed under the `MIT` license. See
+[LICENSE](https://github.com/m-housh/swift-tca-extras/blob/main/LICENSE) for
+full details.
+
+## Credits
+
+This package does implement / extend the
+[oliverfoggin/swift-composable-subscriber](https://github.com/oliverfoggin/swift-composable-subscriber),
+package.
+
+## Contributions / Issues
+
+Feel free to open an issue or submit pull requests with features that would be
+useful.
