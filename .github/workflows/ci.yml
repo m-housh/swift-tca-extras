@@ -14,7 +14,7 @@ jobs:
         xcode: ['15.4']
         config: ['debug', 'release']
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Select Xcode ${{ matrix.xcode }}
         run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app
       - name: Swift version

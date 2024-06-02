@@ -146,11 +146,11 @@ public struct OnFailureOperation<State, Action>: Sendable {
   /// Create a new operation that will set the error on the state at the given key path.
   ///
   /// - Parameters:
-  ///   - keyPath: The key path on the state to set the error.
+  ///   - operation: The set operation to used to handle the error.
   @inlinable
-  public static func set(_ keyPath: WritableKeyPath<State, Error?>) -> Self {
+  public static func set(_ operation: SetOperation<State, Error>) -> Self {
     .init { state, error in
-      state[keyPath: keyPath] = error
+      operation(state: &state, value: error)
       return .none
     }
   }

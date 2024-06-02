@@ -158,22 +158,14 @@ struct ReducerWithArg {
   @Dependency(\.numberClient) var numberClient
 
   var body: some Reducer<State, Action> {
-    Reduce { state, action in
-      switch action {
-      case let .receive(currentNumber):
-        state.currentNumber = currentNumber
-        return .none
-
-      case .task:
-        return .none
-      }
-    }
-    .subscribe(
-      to: numberClient.numberStreamWithArg,
-      using: \.number,
-      on: \.task,
-      with: \.receive
-    )
+    EmptyReducer()
+      .onReceive(action: \.receive, set: .keyPath(\.currentNumber))
+      .subscribe(
+        to: numberClient.numberStreamWithArg,
+        using: \.number,
+        on: \.task,
+        with: \.receive
+      )
   }
 }
 
@@ -185,24 +177,16 @@ struct ReducerWithTransform {
   @Dependency(\.numberClient) var numberClient
 
   var body: some Reducer<State, Action> {
-    Reduce { state, action in
-      switch action {
-      case let .receive(currentNumber):
-        state.currentNumber = currentNumber
-        return .none
-
-      case .task:
-        return .none
+    EmptyReducer()
+      .onReceive(action: \.receive, set: .keyPath(\.currentNumber))
+      .subscribe(
+        to: numberClient.numberStreamWithArg,
+        using: \.number,
+        on: \.task,
+        with: \.receive
+      ) {
+        $0 * 2
       }
-    }
-    .subscribe(
-      to: numberClient.numberStreamWithArg,
-      using: \.number,
-      on: \.task,
-      with: \.receive
-    ) {
-      $0 * 2
-    }
   }
 }
 
@@ -268,7 +252,7 @@ struct FailingReducer {
     .receive(on: \.task, case: \.currentNumber) {
       try await numberClient.currentNumber(fail: true)
     }
-    .onFailure(.set(\.error))
+    .onFailure(.set(.keyPath(\.error)))
   }
 }
 
@@ -294,6 +278,6 @@ struct FailingReducerWithTaskResult {
       .receive(on: \.task, case: \.receive) {
         try await numberClient.currentNumber(fail: true)
       }
-      .onFailure(case: \.receive, .set(\.error))
+      .onFailure(case: \.receive, .set(.keyPath(\.error)))
   }
 }
