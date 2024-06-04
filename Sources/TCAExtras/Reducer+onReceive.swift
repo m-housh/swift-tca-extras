@@ -69,21 +69,36 @@ extension Reducer {
   }
 }
 
+/// Represents an operation that receives a mutable state and value and is used to set the value
+/// on the state.
+///
 public struct SetOperation<State, Value>: Sendable {
   
   @usableFromInline
   let operation: @Sendable (inout State, Value) -> Void
   
+  /// Create a set operation using the given operation handler.
+  ///
+  /// - Parameters:
+  ///   - operation: The operation used to set the value on the state.
   @inlinable
   public init(operation: @escaping @Sendable (inout State, Value) -> Void) {
     self.operation = operation
   }
   
+  /// Create a set operation using the given key path on the state.
+  ///
+  /// - Parameters:
+  ///   - keyPath: The key path used to set the value on the state.
   @inlinable
   public static func keyPath(_ keyPath: WritableKeyPath<State, Value>) -> Self {
     .init { $0[keyPath: keyPath] = $1 }
   }
   
+  /// Create a set operation using the given key path on the state.
+  ///
+  /// - Parameters:
+  ///   - keyPath: The key path used to set the value on the state.
   @inlinable
   public static func keyPath(_ keyPath: WritableKeyPath<State, Value?>) -> Self {
     .init { $0[keyPath: keyPath] = $1 }

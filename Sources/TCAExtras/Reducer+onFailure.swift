@@ -22,6 +22,45 @@ extension Reducer {
   ///     Reduce { state, action in
   ///       ...
   ///     }
+  ///     .onFailure(case: \.receiveError, [.log(logger: logger), .set(.keyPath(\.error))])
+  ///   }
+  /// }
+  /// ```
+  ///
+  /// - Parameters:
+  ///   - toError: Case path to the trigger action for  the error.
+  ///   - onFail: The error handling logic.
+  @inlinable
+  public func onFailure(
+    case toError: CaseKeyPath<Action, Error>,
+    _ onFail: [OnFailureOperation<State, Action>]
+  ) -> _OnFailureReducer<Self> {
+    .init(
+      parent: self,
+      toError: .init(AnyCasePath(toError)),
+      onFailAction: onFail
+    )
+  }
+  
+  /// A higher order reducer that handles errors with the given operation.
+  ///
+  /// ## Example
+  /// ```swift
+  /// @Reducer
+  /// public struct MyFeature {
+  ///   ...
+  ///   enum Action {
+  ///     case receiveError(Error)
+  ///     case task
+  ///     ...
+  ///   }
+  ///
+  ///   @Dependency(\.logger) var logger
+  ///
+  ///   var body: some ReducerOf<Self> {
+  ///     Reduce { state, action in
+  ///       ...
+  ///     }
   ///     .onFailure(case: \.receiveError, .log(logger: logger))
   ///   }
   /// }
@@ -33,7 +72,7 @@ extension Reducer {
   @inlinable
   public func onFailure(
     case toError: CaseKeyPath<Action, Error>,
-    _ onFail: OnFailureOperation<State, Action>
+    _ onFail: OnFailureOperation<State, Action>...
   ) -> _OnFailureReducer<Self> {
     .init(
       parent: self,
@@ -72,7 +111,7 @@ extension Reducer {
   @inlinable
   public func onFailure<T>(
     case toError: CaseKeyPath<Action, TaskResult<T>>,
-    _ onFail: OnFailureOperation<State, Action>
+    _ onFail: OnFailureOperation<State, Action>...
   ) -> _OnFailureReducer<Self> {
     onFailure(case: toError.appending(path: \.failure), onFail)
   }
@@ -113,7 +152,7 @@ extension Reducer where Action: ReceiveAction {
   ///   - onFail: The error handling logic.
   @inlinable
   public func onFailure(
-    _ onFail: OnFailureOperation<State, Action>
+    _ onFail: OnFailureOperation<State, Action>...
   ) -> _OnFailureReducer<Self> {
     .init(
       parent: self,
@@ -225,13 +264,13 @@ public struct _OnFailureReducer<Parent: Reducer>: Reducer {
   let toError: ToError<Parent.Action>
 
   @usableFromInline
-  let onFailAction: OnFailureOperation<Parent.State, Parent.Action>
+  let onFailAction: [OnFailureOperation<Parent.State, Parent.Action>]
 
   @usableFromInline
   init(
     parent: Parent,
     toError: ToError<Parent.Action>,
-    onFailAction: OnFailureOperation<Parent.State, Parent.Action>
+    onFailAction: [OnFailureOperation<Parent.State, Parent.Action>]
   ) {
     self.parent = parent
     self.toError = toError
@@ -251,7 +290,7 @@ public struct _OnFailureReducer<Parent: Reducer>: Reducer {
 
     return .merge(
       baseEffects,
-      onFailAction(state: &state, error: error)
+      .merge(onFailAction.map({ $0(state: &state, error: error) }))
     )
   }
 }
